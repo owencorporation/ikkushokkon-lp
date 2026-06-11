@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>あなたのキャリアタイプ診断結果 | 一職入魂</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:   #1B3A6B;
+      --orange: #E8510E;
+      --yellow: #F8C94E;
+      --green:  #06C755;
+      --bg:     #F2F5FA;
+      --card:   #FFFFFF;
+      --border: #D4DFEE;
+      --text:   #1a1a2e;
+      --sub:    #6c757d;
+      --font: 'Noto Sans JP', -apple-system, 'Hiragino Kaku Gothic ProN', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── Top Bar ── */
+    .top-bar {
+      background: var(--navy);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .top-bar-logo { font-size: 0.82rem; font-weight: 900; color: #fff; letter-spacing: 0.04em; }
+    .top-bar-logo span { color: var(--yellow); }
+    .top-bar-label { font-size: 0.68rem; color: rgba(255,255,255,0.6); }
+
+    /* ── Type Hero ── */
+    .type-hero {
+      padding: 36px 24px 28px;
+      text-align: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .type-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      z-index: 0;
+    }
+    .type-hero > * { position: relative; z-index: 1; }
+    .type-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+      letter-spacing: 0.1em;
+    }
+    .type-icon { font-size: 3rem; margin-bottom: 8px; line-height: 1; }
+    .type-name {
+      font-size: 1.7rem;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+    .type-tagline {
+      font-size: 0.82rem;
+      opacity: 0.88;
+      line-height: 1.75;
+    }
+
+    /* ── Share strip ── */
+    .share-strip {
+      background: rgba(0,0,0,0.18);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.8);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── Section cards ── */
+    .result-section { margin: 14px 16px 0; }
+    .result-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+    }
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--sub);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 14px;
+      background: var(--orange);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* ── Description ── */
+    .type-desc {
+      font-size: 0.88rem;
+      line-height: 2;
+      color: var(--text);
+    }
+    .type-desc .highlight {
+      background: linear-gradient(transparent 60%, rgba(248,201,78,0.4) 60%);
+      font-weight: 700;
+    }
+
+    /* ── Strengths ── */
+    .strengths-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .strength-chip {
+      background: var(--navy);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 30px;
+    }
+
+    /* ── Conversion (競技→ビジネス) ── */
+    .conversion-list { display: flex; flex-direction: column; gap: 12px; }
+    .conv-item {
+      background: #F7F9FF;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .conv-row {
+      display: flex;
+      align-items: center;
+    }
+    .conv-sport {
+      flex: 1;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--navy);
+      border-right: 1px solid var(--border);
+      line-height: 1.4;
+    }
+    .conv-arrow-wrap {
+      padding: 0 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+    .conv-arrow { color: var(--orange); font-size: 1.5rem; line-height: 1; }
+    .conv-eval {
+      font-size: 0.58rem;
+      color: var(--sub);
+      text-align: center;
+      line-height: 1.3;
+      max-width: 60px;
+    }
+    .conv-biz {
+      flex: 1;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--orange);
+      line-height: 1.4;
+    }
+
+    /* ── Jobs & Industries ── */
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag-job {
+      background: #EEF3FF;
+      color: var(--navy);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+    .tag-industry {
+      background: #FFF3E0;
+      color: #BF360C;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    /* ── Company Size ── */
+    .size-row {
+      display: flex;
+      gap: 6px;
+    }
+    .size-item {
+      flex: 1;
+      text-align: center;
+      padding: 10px 4px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border: 2px solid #E8ECF2;
+      color: #C0C8D8;
+      background: #F5F6F8;
+      opacity: 0.5;
+      transition: all 0.15s;
+    }
+    .size-item.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+      opacity: 1;
+      box-shadow: 0 3px 10px rgba(27,58,107,0.3);
+    }
+    .size-item .size-icon { font-size: 1.1rem; display: block; margin-bottom: 3px; }
+
+    /* ── Culture chips ── */
+    .culture-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .culture-chip {
+      background: #E8F5E9;
+      color: #2E7D32;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    /* ── Good/Bad env ── */
+    .env-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .env-card { border-radius: 10px; padding: 14px; }
+    .env-card.good { background: #E8F5E9; }
+    .env-card.bad  { background: #FFF3E0; }
+    .env-card-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .env-card.good .env-card-title { color: #2E7D32; }
+    .env-card.bad  .env-card-title { color: #BF360C; }
+    .env-card-text { font-size: 0.75rem; line-height: 1.7; color: var(--text); }
+
+    /* ── Skills ── */
+    .skills-list { display: flex; flex-direction: column; gap: 8px; }
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #F7F9FF;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .skill-item::before {
+      content: '▲';
+      color: var(--orange);
+      font-size: 0.65rem;
+      flex-shrink: 0;
+    }
+
+    /* ── Match meter ── */
+    .match-bar-wrap { margin-top: 4px; }
+    .match-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--sub);
+      margin-bottom: 6px;
+    }
+    .match-bar {
+      height: 10px;
+      background: #EEF3FF;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .match-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--navy), #4A7FC1);
+      border-radius: 10px;
+      transition: width 1s ease;
+    }
+    .match-bar-name { font-size: 0.78rem; font-weight: 700; color: var(--navy); }
+
+    /* ── Type switcher ── */
+    .type-switcher-wrap {
+      margin: 14px 16px 0;
+    }
+    .type-switcher-title {
+      font-size: 0.72rem;
+      color: var(--sub);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .type-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .type-switch-btn {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.72rem;
+      font-family: var(--font);
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .type-switch-btn.current { border-color: var(--navy); background: #EEF3FF; color: var(--navy); }
+    .type-switch-btn:hover { border-color: var(--navy); }
+
+    /* ── CTA ── */
+    .cta-wrap {
+      background: var(--navy);
+      margin-top: 20px;
+      padding: 36px 24px 48px;
+      text-align: center;
+      color: #fff;
+    }
+    .cta-ttl {
+      font-size: 1.2rem;
+      font-weight: 900;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .cta-ttl em { color: var(--yellow); font-style: normal; }
+    .cta-body {
+      font-size: 0.82rem;
+      line-height: 2;
+      opacity: 0.88;
+      margin-bottom: 20px;
+    }
+    .cta-body strong { color: var(--yellow); }
+    .cta-features {
+      background: rgba(255,255,255,0.09);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .cta-feature {
+      font-size: 0.8rem;
+      padding: 3px 0;
+      display: flex;
+      gap: 8px;
+      line-height: 1.6;
+    }
+    .cta-feature::before { content: '✔'; color: var(--yellow); font-weight: 700; flex-shrink: 0; }
+    .cta-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--green);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: var(--font);
+      padding: 16px 20px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(6,199,85,0.4);
+      transition: background 0.15s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cta-btn:hover  { background: #05b349; transform: translateY(-2px); }
+    .cta-btn:active { transform: scale(0.97); }
+    .cta-btn svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+    .cta-note { font-size: 0.68rem; opacity: 0.55; margin-top: 10px; }
+
+    /* ── Footer ── */
+    footer { background: #0f172a; padding: 20px 24px; text-align: center; }
+    .footer-logo { font-size: 0.85rem; font-weight: 900; color: #fff; }
+    .footer-logo span { color: var(--yellow); }
+    .footer-sub { font-size: 0.6rem; color: rgba(255,255,255,0.35); margin-top: 4px; }
+
+    /* ── Divider ── */
+    .section-divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+    /* ── Radar Chart ── */
+    .radar-wrap { padding: 4px 0 8px; }
+    .radar-score-row {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 14px;
+      gap: 2px;
+    }
+    .radar-score-item { text-align: center; flex: 1; }
+    .radar-score-num {
+      font-size: 1.15rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .radar-score-lbl {
+      font-size: 0.58rem;
+      color: var(--sub);
+      margin-top: 3px;
+      line-height: 1.3;
+    }
+
+    /* ── AI Advisor Message ── */
+    .advisor-card {
+      background: linear-gradient(135deg, #1B3A6B 0%, #2952A3 100%);
+      border-radius: 12px;
+      padding: 20px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .advisor-card::after {
+      content: '🤖';
+      position: absolute;
+      right: 14px;
+      top: 10px;
+      font-size: 2.2rem;
+      opacity: 0.15;
+    }
+    .advisor-label {
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--yellow);
+      margin-bottom: 8px;
+    }
+    .advisor-text {
+      font-size: 0.84rem;
+      line-height: 2;
+    }
+    .ai-badge {
+      display: inline-block;
+      background: rgba(248,201,78,0.18);
+      color: var(--yellow);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 2px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(248,201,78,0.35);
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-bar-logo">一職入魂<span>キャリア</span></div>
+  <div class="top-bar-label">キャリアタイプ診断</div>
+</div>
+
+<div id="resultRoot"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   タイプデータ定義（10タイプ）
+══════════════════════════════════════════ */
+const TYPES = {
+  1: {
+    icon: '👑',
+    name: '戦略型キャプテン',
+    tagline: 'チームをビジョンで動かした、\n生まれながらのリーダー',
+    bgColor: '#1B3A6B',
+    accentColor: '#2952A3',
+    description: 'キャプテンとしてチームに方針を示し、仲間を動かしてきたあなたは、ビジネスでも<span class="highlight">即戦力のリーダー候補</span>。「なぜこれをやるか」から逆算して考え、組織を牽引する力は、企業が最も求めるマネジメント資質そのものです。',
+    strengths: ['統率力', '決断力', 'ビジョン設定力'],
+    conversions: [
+      { sport: 'キャプテン経験', eval: '組織を動かす求心力', biz: '20代から抜擢される営業リーダー・部門長候補' },
+      { sport: 'チーム戦略立案', eval: '逆算思考・目標設定力', biz: '経営企画・新規事業の中核担当として採用される' },
+      { sport: '仲間への影響力', eval: '人を動かすリーダーシップ', biz: 'コンサルPM・プロジェクトリーダー職での早期活躍' }
+    ],
+    jobs: ['コンサルタント', '経営企画', '営業マネージャー', '事業開発', 'ベンチャー管理職'],
+    industries: ['コンサルティング', '総合商社', 'メーカー', 'スタートアップ'],
+    sizes: { startup: false, venture: true, mid: true, large: true },
+    culture: ['実力主義', '挑戦文化', 'ビジョン重視', 'ボトムアップ歓迎'],
+    goodEnv: '裁量が大きく、成果で正当に評価される環境。若いうちからリーダーポジションを任せてもらえる組織。',
+    badEnv: '意思決定が遅く、変化が少ない環境。年功序列で実力が反映されない組織。',
+    skills: ['財務・数字へのリテラシー', 'データ分析の基礎', '英語コミュニケーション']
+  },
+  2: {
+    icon: '🔥',
+    name: '逆境突破型',
+    tagline: '挫折を糧に変える、\n最強のメンタル保有者',
+    bgColor: '#7B2D00',
+    accentColor: '#A33D00',
+    description: '怪我や挫折を何度も乗り越えてきたあなたの精神力は、ビジネスの「壁」に誰より強い。うまくいかない状況でも諦めず、打ち手を変えて前進し続ける力は、<span class="highlight">企業が最も求めるタフさ</span>そのもの。特にスタートアップや営業最前線で突出した力を発揮します。',
+    strengths: ['再起力', '精神的タフネス', '打開力'],
+    conversions: [
+      { sport: '怪我・挫折からの復帰', eval: '困難への耐性・適応力', biz: 'SaaS・人材営業で高達成率を叩き出すトッププレイヤー' },
+      { sport: '苦しい時期の継続', eval: '粘り強い行動力', biz: 'インセンティブ型組織で上位5〜10%の営業成績' },
+      { sport: '自分と闘い続けた経験', eval: '高い自己管理能力', biz: '複数業界・職種で再現性のある成果を出せる即戦力' }
+    ],
+    jobs: ['法人営業', 'スタートアップ全般', 'コンサルタント', '事業開発', '起業家'],
+    industries: ['スタートアップ', 'ベンチャー', 'コンサル', '人材・HR'],
+    sizes: { startup: true, venture: true, mid: false, large: false },
+    culture: ['挑戦文化', '成長重視', 'インセンティブ制', '成果主義'],
+    goodEnv: '失敗を学びに変えられる文化があり、挑戦を評価する環境。成果が報酬に直結する仕組みがある組織。',
+    badEnv: '一度の失敗で評価が下がる減点方式の組織。変化が少なく、挑戦機会がない環境。',
+    skills: ['論理的思考力', 'プレゼンテーション力', 'マーケティング基礎知識']
+  },
+  3: {
+    icon: '⚡',
+    name: '努力型職人',
+    tagline: '反復と継続で誰より深く磨いた、\n職人気質の実力者',
+    bgColor: '#1A4731',
+    accentColor: '#1D5C3A',
+    description: '地道な反復練習で技術を磨き続けてきたあなた。継続力と再現性の高さは、ビジネスでは<span class="highlight">「信頼できる即戦力」として高く評価</span>される。コツコツ積み上げる力が、専門性の高いキャリアの土台になります。',
+    strengths: ['継続力', '高い精度・再現性', '専門性探求力'],
+    conversions: [
+      { sport: '反復練習の継続', eval: '高い実行力と再現性', biz: 'エンジニア・専門職で着実に昇給・社内で頼られる存在に' },
+      { sport: '技術への深い探求', eval: '専門性の深化', biz: '特定分野のスペシャリストとして市場価値が年々上昇' },
+      { sport: '自己管理能力', eval: 'セルフマネジメント力', biz: '任せたら必ずやり遂げる・上司から信頼される即戦力' }
+    ],
+    jobs: ['ITエンジニア', '専門職全般', '研究開発', '品質管理', '技術営業'],
+    industries: ['IT・テック', '製造業', '金融', '医療・医薬'],
+    sizes: { startup: false, venture: false, mid: true, large: true },
+    culture: ['専門性重視', '安定志向', '実力評価', '技術革新'],
+    goodEnv: '専門性が評価され、じっくり取り組める環境。スキルアップへの投資（研修・資格支援）がある組織。',
+    badEnv: '浅く広く、器用さだけが求められる環境。成果の質より速度だけが評価される組織。',
+    skills: ['コミュニケーション力・発信力', 'プロジェクト管理スキル', 'チームマネジメント基礎']
+  },
+  4: {
+    icon: '🤝',
+    name: 'チームビルダー型',
+    tagline: '人の心を動かし、チームを\n最強にする縁の下のリーダー',
+    bgColor: '#1B3A6B',
+    accentColor: '#2952A3',
+    description: 'チームの雰囲気を作り、人の心を動かしてきたあなた。「あいつがいると頑張れる」と言われてきた存在感は、ビジネスでは<span class="highlight">組織の中核を担う人材</span>として評価される。人を育てる才能が、キャリアの最大の武器になります。',
+    strengths: ['組織構築力', 'コミュニケーション力', '人材育成力'],
+    conversions: [
+      { sport: 'チームの雰囲気づくり', eval: '組織文化の形成力', biz: '人事・採用担当として組織の採用力・定着率を底上げ' },
+      { sport: '後輩・仲間への指導', eval: '人材育成力', biz: '育成のプロとして若手の成長を加速させるマネージャー' },
+      { sport: '人間関係の調整', eval: '社内外の調整能力', biz: '顧客・上司・部下を巻き込むプロジェクト推進の要' }
+    ],
+    jobs: ['人事・採用', '営業', 'カスタマーサクセス', '教育・トレーナー', 'HR Bizパートナー'],
+    industries: ['HR tech', '教育', 'サービス業', 'コンサルティング'],
+    sizes: { startup: false, venture: true, mid: true, large: true },
+    culture: ['チーム重視', '人材育成文化', '心理的安全性', '長期育成'],
+    goodEnv: '人との関わりが多く、チームで動く環境。成長を応援する文化があり、育成に投資する組織。',
+    badEnv: '個人プレー中心で、数字だけが評価される環境。人間関係が希薄な組織。',
+    skills: ['戦略思考・ロジカルシンキング', '数値分析・データ活用', '業界・市場知識']
+  },
+  5: {
+    icon: '🧠',
+    name: '分析型プレイヤー',
+    tagline: 'データと戦術で相手を読む、\nビジネスの「頭脳」',
+    bgColor: '#2D1B6B',
+    accentColor: '#3D2A8A',
+    description: '相手チームの傾向を読み、データで戦略を組み立てるのが得意なあなた。この<span class="highlight">「考えてから動く」力</span>は、ビジネスでは課題解決やマーケティングで圧倒的な強みになる。論理で動く組織で、その力は一気に開花します。',
+    strengths: ['分析力', 'ロジカルシンキング', '戦略立案力'],
+    conversions: [
+      { sport: '試合・相手の分析', eval: 'データドリブンな課題解決', biz: '課題を構造化し具体的な打ち手を出すコンサルタント' },
+      { sport: '戦術設計・試合準備', eval: '逆算思考・仮説検証', biz: 'ROIを数字で証明できるマーケター・データアナリスト' },
+      { sport: '状況に応じた判断', eval: '論理的な意思決定力', biz: '数字で語れる人材として経営層と直接仕事ができる' }
+    ],
+    jobs: ['マーケター', 'コンサルタント', 'データアナリスト', '経営企画', 'PMO'],
+    industries: ['IT・テック', '広告・マーケ', 'コンサルティング', '金融'],
+    sizes: { startup: true, venture: true, mid: true, large: true },
+    culture: ['データドリブン', '挑戦文化', '論理重視', '成果主義'],
+    goodEnv: 'データや論理が評価され、自分で考えて動ける環境。仮説検証を繰り返せる組織。',
+    badEnv: '経験則や感覚だけで判断される環境。「考えること」より「動くこと」だけが評価される組織。',
+    skills: ['プレゼンテーション力・発信力', 'リーダーシップ・人を動かす力', '英語コミュニケーション']
+  },
+  6: {
+    icon: '🚀',
+    name: '突破型アタッカー',
+    tagline: '結果にこだわり、壁を突き破る\n最強の行動力の持ち主',
+    bgColor: '#7B2D00',
+    accentColor: '#9C3D00',
+    description: '点を取る、勝ちにこだわる。結果への執着心は、営業やビジネスの最前線で<span class="highlight">最大の武器</span>になる。「やると決めたらやる」その行動力と突破力で、ビジネスの壁を次々と突破していける。成果が報酬に直結する環境で最も輝くタイプ。',
+    strengths: ['目標達成力', '行動力・実行力', '突破力'],
+    conversions: [
+      { sport: '点取り屋・エース', eval: '結果への執着心', biz: '入社1年以内にトップセールス入り・高インセンティブ獲得' },
+      { sport: '結果へのこだわり', eval: '強い数値意識', biz: 'チームの売上目標を牽引する営業リーダーとして昇格' },
+      { sport: '勝ち続ける精神力', eval: '目標達成の再現性', biz: 'スタートアップで0→1の事業立ち上げを担う中核人材' }
+    ],
+    jobs: ['法人営業', '事業開発', '起業家・経営者', 'フィールドセールス', '新規開拓営業'],
+    industries: ['スタートアップ', 'SaaS・IT', '不動産', '人材・HR'],
+    sizes: { startup: true, venture: true, mid: false, large: false },
+    culture: ['成果主義', '高インセンティブ', '挑戦文化', '少数精鋭'],
+    goodEnv: '成果がダイレクトに評価・報酬に反映される環境。裁量が大きく、自分のやり方で動ける組織。',
+    badEnv: '年功序列で成果が評価されない組織。決定が遅く、行動に制約が多い環境。',
+    skills: ['マネジメントスキル', '戦略的思考力', '財務・数値の基礎知識']
+  },
+  7: {
+    icon: '🛡️',
+    name: '縁の下の力持ち型',
+    tagline: 'チームを影で支える、\n信頼の厚いサポートの達人',
+    bgColor: '#1A4731',
+    accentColor: '#205A3E',
+    description: '表に出ずチームを支えてきたあなた。「誰かのために」という姿勢と、先を読んで動く力は、ビジネスでは<span class="highlight">組織になくてはならない存在</span>として評価される。縁の下の力は、必ず市場価値になります。',
+    strengths: ['サポート力', '先読み・気配り力', '実行力・信頼性'],
+    conversions: [
+      { sport: 'マネージャー・サポート役', eval: '組織推進・段取り力', biz: '複数案件を円滑に推進するPMO・プロジェクト管理のプロ' },
+      { sport: '仲間への気配り', eval: '顧客・メンバー満足度向上', biz: 'カスタマーサクセスで顧客継続率・NPS向上を実現' },
+      { sport: '陰での努力の継続', eval: '高い信頼性・誠実さ', biz: '部門をまたいで頼られる社内推進のキーパーソン' }
+    ],
+    jobs: ['PMO・プロジェクト管理', '企画職', 'オペレーション', 'カスタマーサクセス', '人事'],
+    industries: ['IT・テック', 'コンサル', 'メーカー', '総合商社'],
+    sizes: { startup: false, venture: true, mid: true, large: true },
+    culture: ['チーム重視', '安定志向', '誠実・誠意重視', '長期雇用'],
+    goodEnv: '役割が明確で、貢献が正しく評価される環境。チームワークを大切にする文化がある組織。',
+    badEnv: '自分をアピールしなければ評価されない組織。個人プレーで成果を奪い合う文化。',
+    skills: ['自己発信力・アピール力', 'リーダーシップ・率先力', '交渉力・折衝スキル']
+  },
+  8: {
+    icon: '⚓',
+    name: '精神的支柱型',
+    tagline: '苦しいときほど頼られる、\nチームの「絶対的な存在」',
+    bgColor: '#1B3A6B',
+    accentColor: '#243E73',
+    description: 'チームが苦しいときに「あいつがいるから大丈夫」と思わせる存在。この<span class="highlight">「信頼を集める力」</span>は、ビジネスにおいて最も長期的な価値を持つ。どんな組織でも、自然と中心人物になれる器があります。',
+    strengths: ['信頼構築力', '安定感・落ち着き', '誠実さ'],
+    conversions: [
+      { sport: 'チームの精神的支柱', eval: '組織の安定剤・求心力', biz: 'メンバーの離職防止・エンゲージメント向上に貢献する人事' },
+      { sport: '誰からも信頼された実績', eval: '顧客・上司・部下からの信頼', biz: 'リレーション営業で長期顧客を深耕・LTV最大化を実現' },
+      { sport: '動じない精神力', eval: '危機対応・冷静な判断', biz: 'クレームや危機的状況ほど信頼を積み上げるリスク管理職' }
+    ],
+    jobs: ['人事・労務', 'PR・広報', 'カスタマーサクセス', 'リテール営業', 'ブランドマネージャー'],
+    industries: ['サービス業', 'HR・人材', '金融', '医療・福祉'],
+    sizes: { startup: false, venture: false, mid: true, large: true },
+    culture: ['安定志向', 'チーム重視', '誠実・誠意', '長期雇用'],
+    goodEnv: '長期的な信頼関係が重要な環境。人との関わりを大切にする文化がある組織。',
+    badEnv: '短期成果主義で頻繁な人員変動がある環境。人間関係が浅く入れ替わりが激しい組織。',
+    skills: ['戦略思考・ロジカルシンキング', '数値分析・KPI管理', 'プレゼン・自己発信力']
+  },
+  9: {
+    icon: '💡',
+    name: '変革型リーダー',
+    tagline: '「もっとこうすれば」を行動に変える、\nイノベーターの素質',
+    bgColor: '#4A1D6B',
+    accentColor: '#5D2D82',
+    description: '「もっとこうすればいい」と感じ、実際に動いてきたあなた。チームの仕組みや文化を変えようとした経験は、ビジネスでは<span class="highlight">組織変革・新規事業をリードする力</span>になる。変化を生み出すことが、あなたの最大の市場価値です。',
+    strengths: ['変革・改善力', '発想力', '行動力・実行力'],
+    conversions: [
+      { sport: '練習方法・戦術の改革', eval: '業務改善・DX推進力', biz: 'DX推進・業務改革プロジェクトのリーダーとして組織を変える' },
+      { sport: 'チーム文化の変革', eval: '組織文化の形成・刷新', biz: '新規事業開発・スタートアップ立ち上げで0→1を実現' },
+      { sport: '新しい視点の導入', eval: '既成概念を壊す発想', biz: 'VCやアクセラレータが注目するアントレプレナー人材' }
+    ],
+    jobs: ['新規事業開発', 'コンサルタント', '起業家・経営者', 'マーケター', 'プロダクトマネージャー'],
+    industries: ['スタートアップ', 'コンサルティング', 'IT・テック', '広告・マーケ'],
+    sizes: { startup: true, venture: true, mid: false, large: false },
+    culture: ['挑戦文化', '変化歓迎', 'フラット・権限委譲', 'スピード重視'],
+    goodEnv: '変化を歓迎し、アイデアを実行できる環境。失敗を許容する文化がある組織。',
+    badEnv: '前例主義が強く、変化に抵抗がある環境。稟議が多く意思決定が遅い組織。',
+    skills: ['財務・会計スキル', 'プロジェクト管理', '法務・コンプライアンス基礎']
+  },
+  10: {
+    icon: '🌟',
+    name: 'オールラウンダー型',
+    tagline: 'どこでも戦える万能性で、\n変化の時代を生き抜く',
+    bgColor: '#1B3A6B',
+    accentColor: '#22487A',
+    description: 'どのポジションでも一定以上の力を発揮してきたあなた。「なんでもできる」は弱みではなく、ビジネスでは<span class="highlight">最も変化に強い人材</span>として評価される。特に変化の速い現代では、適応力が最大の競争優位になります。',
+    strengths: ['高い適応力', '幅広いスキル', '柔軟な思考力'],
+    conversions: [
+      { sport: '複数ポジションの経験', eval: '部門横断的な活躍力', biz: '部署異動・新プロジェクトでも即戦力として期待される存在' },
+      { sport: 'あらゆる状況への対応', eval: '変化への適応力', biz: '組織変革期・急成長フェーズで最も重宝されるジェネラリスト' },
+      { sport: '様々な形でのチーム貢献', eval: '総合的なビジネス力', biz: '商社・コンサルで幅広いキャリアを形成し、選択肢を広げる' }
+    ],
+    jobs: ['ゼネラリスト・総合職', 'コンサルタント', '事業開発', '経営企画', 'スタートアップ全般'],
+    industries: ['総合商社', 'コンサルティング', 'スタートアップ', 'IT・テック'],
+    sizes: { startup: true, venture: true, mid: true, large: true },
+    culture: ['成長重視', 'ゼネラリスト育成', '挑戦文化', 'キャリア形成支援'],
+    goodEnv: '幅広い経験を積める環境。異動・新規挑戦の機会が豊富な組織。',
+    badEnv: '狭い専門性だけが評価される環境。一つの業務だけに特化させられる組織。',
+    skills: ['専門スキルを1つ深める（T字型キャリア）', '英語コミュニケーション', '財務・数値リテラシー']
+  }
+};
+
+/* ══════════════════════════════════════════
+   レーダーチャート定義
+   軸順: リーダーシップ / 分析力 / 実行力 / タフネス / チーム力 / コミュ力
+══════════════════════════════════════════ */
+const RADAR_LABELS = ['リーダー\nシップ', '分析力', '実行力', 'タフネス', 'チーム力', 'コミュ力'];
+const RADAR_SCORES = {
+   1: [5, 4, 4, 3, 4, 4],  // 戦略型キャプテン
+   2: [3, 2, 5, 5, 3, 3],  // 逆境突破型
+   3: [2, 3, 5, 5, 3, 2],  // 努力型職人
+   4: [3, 2, 3, 3, 5, 5],  // チームビルダー型
+   5: [3, 5, 3, 3, 3, 3],  // 分析型プレイヤー
+   6: [4, 2, 5, 5, 3, 4],  // 突破型アタッカー
+   7: [2, 3, 4, 4, 5, 4],  // 縁の下の力持ち型
+   8: [3, 2, 3, 5, 5, 4],  // 精神的支柱型
+   9: [4, 4, 5, 4, 3, 3],  // 変革型リーダー
+  10: [3, 3, 4, 4, 4, 4],  // オールラウンダー型
+};
+
+function buildRadarSVG(scores, fillColor) {
+  const W = 240, H = 240, cx = 120, cy = 120;
+  const maxR = 78, n = 6, LEVELS = 5;
+  const angles = Array.from({length: n}, (_, i) => (-90 + i * 60) * Math.PI / 180);
+
+  // Grid
+  let grid = '';
+  for (let lv = 1; lv <= LEVELS; lv++) {
+    const r = lv / LEVELS * maxR;
+    const pts = angles.map(a => `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`).join(' ');
+    grid += `<polygon points="${pts}" fill="${lv % 2 === 0 ? 'rgba(27,58,107,0.04)' : 'none'}" stroke="#D4DFEE" stroke-width="${lv === LEVELS ? 1.5 : 0.8}"/>`;
+  }
+
+  // Axes
+  const axes = angles.map(a =>
+    `<line x1="${cx}" y1="${cy}" x2="${(cx + maxR * Math.cos(a)).toFixed(1)}" y2="${(cy + maxR * Math.sin(a)).toFixed(1)}" stroke="#D4DFEE" stroke-width="1"/>`
+  ).join('');
+
+  // Data polygon
+  const dataPts = scores.map((s, i) => {
+    const r = s / LEVELS * maxR;
+    return `${(cx + r * Math.cos(angles[i])).toFixed(1)},${(cy + r * Math.sin(angles[i])).toFixed(1)}`;
+  }).join(' ');
+
+  // Dots on data
+  const dots = scores.map((s, i) => {
+    const r = s / LEVELS * maxR;
+    return `<circle cx="${(cx + r * Math.cos(angles[i])).toFixed(1)}" cy="${(cy + r * Math.sin(angles[i])).toFixed(1)}" r="4" fill="${fillColor}" stroke="#fff" stroke-width="1.5"/>`;
+  }).join('');
+
+  // Scale numbers along top axis (right side of axis)
+  const scaleNums = [1,2,3,4,5].map(lv => {
+    const r = lv / LEVELS * maxR;
+    return `<text x="${(cx + 7).toFixed(1)}" y="${(cy - r + 1).toFixed(1)}" font-size="8" fill="#AAB8D0" font-family="'Noto Sans JP',sans-serif" dominant-baseline="middle">${lv}</text>`;
+  }).join('');
+
+  // Labels
+  const lblOffset = maxR + 22;
+  const labels = RADAR_LABELS.map((lbl, i) => {
+    const a = angles[i];
+    const lx = (cx + lblOffset * Math.cos(a)).toFixed(1);
+    const ly = (cy + lblOffset * Math.sin(a)).toFixed(1);
+    const anchor = Math.abs(Math.cos(a)) < 0.15 ? 'middle' : (Math.cos(a) > 0 ? 'start' : 'end');
+    const lines = lbl.split('\n');
+    if (lines.length === 1) {
+      return `<text x="${lx}" y="${ly}" text-anchor="${anchor}" dominant-baseline="middle" font-size="9.5" font-weight="700" fill="#1B3A6B" font-family="'Noto Sans JP',sans-serif">${lbl}</text>`;
+    }
+    const dyBase = parseFloat(ly) - 6;
+    return `<text text-anchor="${anchor}" font-size="9.5" font-weight="700" fill="#1B3A6B" font-family="'Noto Sans JP',sans-serif">
+      <tspan x="${lx}" y="${dyBase}">${lines[0]}</tspan>
+      <tspan x="${lx}" dy="12">${lines[1]}</tspan>
+    </text>`;
+  }).join('');
+
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;display:block;margin:0 auto;">
+    ${grid}${axes}${scaleNums}
+    <polygon points="${dataPts}" fill="${fillColor}30" stroke="${fillColor}" stroke-width="2.5" stroke-linejoin="round"/>
+    ${dots}${labels}
+  </svg>`;
+}
+
+/* ══════════════════════════════════════════
+   レンダリング
+══════════════════════════════════════════ */
+function getTypeId() {
+  const p = new URLSearchParams(location.search);
+  const n = parseInt(p.get('type'));
+  return (n >= 1 && n <= 10) ? n : 1;
+}
+
+function sizeLabel(key) {
+  return { startup: 'スタート\nアップ', venture: 'ベンチャー', mid: '中堅企業', large: '大手企業' }[key];
+}
+function sizeIcon(key) {
+  return { startup: '🌱', venture: '⚡', mid: '🏢', large: '🏛️' }[key];
+}
+
+function render(typeId) {
+  let t = TYPES[typeId];
+  if (!t) return;
+
+  // AI診断結果があればデフォルト値に上書きマージ
+  let custom = null;
+  try {
+    const raw = localStorage.getItem('career_diagnosis_result');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.typeId === typeId) custom = parsed;
+    }
+  } catch(e) {}
+
+  if (custom) {
+    t = Object.assign({}, t);
+    if (custom.description) t.description = custom.description;
+    if (custom.strengths && custom.strengths.length === 3) t.strengths = custom.strengths;
+    if (custom.conversions && custom.conversions.length > 0) t.conversions = custom.conversions;
+    if (custom.goodEnv) t.goodEnv = custom.goodEnv;
+    if (custom.badEnv) t.badEnv = custom.badEnv;
+    if (custom.skills && custom.skills.length > 0) t.skills = custom.skills;
+  }
+
+  document.title = `${t.name} | キャリアタイプ診断 | 一職入魂`;
+
+  const sizeItems = Object.entries(t.sizes).map(([k, active]) => `
+    <div class="size-item ${active ? 'active' : ''}">
+      <span class="size-icon">${sizeIcon(k)}</span>
+      ${sizeLabel(k).replace('\n', '<br>')}
+    </div>
+  `).join('');
+
+  const switcherBtns = Object.entries(TYPES).map(([id, tp]) => `
+    <button class="type-switch-btn ${parseInt(id) === typeId ? 'current' : ''}"
+      onclick="switchType(${id})">
+      ${tp.icon} ${tp.name}
+    </button>
+  `).join('');
+
+  document.getElementById('resultRoot').innerHTML = `
+    <!-- Hero -->
+    <section class="type-hero" style="background: linear-gradient(160deg, ${t.bgColor} 0%, ${t.accentColor} 100%);">
+      <div class="type-badge">CAREER TYPE #${typeId}</div>
+      <div class="type-icon">${t.icon}</div>
+      <div class="type-name">${t.name}</div>
+      <div class="type-tagline">${t.tagline.replace(/\n/g, '<br>')}</div>
+    </section>
+
+    <!-- Radar Chart -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">強みレーダーチャート</div>
+        <div class="radar-wrap">
+          ${buildRadarSVG(RADAR_SCORES[typeId], t.bgColor)}
+          <div class="radar-score-row">
+            ${RADAR_LABELS.map((lbl, i) => `
+              <div class="radar-score-item">
+                <div class="radar-score-num" style="color:${t.bgColor}">${RADAR_SCORES[typeId][i]}</div>
+                <div class="radar-score-lbl">${lbl.replace('\n', '<br>')}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">タイプ詳細</div>
+        <div class="type-desc">${t.description}</div>
+      </div>
+    </div>
+
+    <!-- Strengths -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">強み TOP 3</div>
+        <div class="strengths-row">
+          ${t.strengths.map((s, i) => `<div class="strength-chip">${['🥇','🥈','🥉'][i]} ${s}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Conversion -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">競技経験 → 市場価値への変換</div>
+        <div class="conversion-list">
+          ${t.conversions.map(c => `
+            <div class="conv-item">
+              <div class="conv-row">
+                <div class="conv-sport">🏅 ${c.sport}</div>
+                <div class="conv-arrow-wrap">
+                  <div class="conv-arrow">→</div>
+                  <div class="conv-eval">${c.eval}</div>
+                </div>
+                <div class="conv-biz">💼 ${c.biz}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Jobs -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">向いている職種</div>
+        <div class="tag-list">
+          ${t.jobs.map(j => `<span class="tag-job">${j}</span>`).join('')}
+        </div>
+        <div class="section-divider"></div>
+        <div class="section-title">向いている業界</div>
+        <div class="tag-list">
+          ${t.industries.map(i => `<span class="tag-industry">${i}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Company size -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">向いている企業規模</div>
+        <div class="size-row">${sizeItems}</div>
+      </div>
+    </div>
+
+    <!-- Culture -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">向いている社風</div>
+        <div class="culture-list">
+          ${t.culture.map(c => `<span class="culture-chip">✓ ${c}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Environment -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">活躍できる環境</div>
+        <div class="env-grid">
+          <div class="env-card good">
+            <div class="env-card-title">✅ 活躍しやすい</div>
+            <div class="env-card-text">${t.goodEnv}</div>
+          </div>
+          <div class="env-card bad">
+            <div class="env-card-title">⚠️ 注意が必要</div>
+            <div class="env-card-text">${t.badEnv}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">今後伸ばすべき能力</div>
+        <div class="skills-list">
+          ${t.skills.map(s => `<div class="skill-item">${s}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    ${custom && custom.advisorMessage ? `
+    <!-- AI Advisor Message -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">AIアドバイザーからのメッセージ</div>
+        <div class="advisor-card">
+          <div class="advisor-label">✦ AI CAREER ADVISOR</div>
+          <div class="advisor-text">${custom.advisorMessage}</div>
+        </div>
+      </div>
+    </div>
+    ` : ''}
+
+    <!-- Type switcher -->
+    <div class="type-switcher-wrap">
+      <div class="type-switcher-title">── 他のタイプを見る ──</div>
+      <div class="type-switcher">${switcherBtns}</div>
+    </div>
+
+    <!-- CTA -->
+    <section class="cta-wrap">
+      <h2 class="cta-ttl">あなたの強みを<br><em>仕事に活かす</em>方法を<br>一緒に考えませんか？</h2>
+      <p class="cta-body">
+        診断結果はあくまで出発点です。<br>
+        <strong>「どの会社・ポジションが自分に合うか」</strong><br>
+        は、一人では判断しにくいもの。<br><br>
+        体育会出身者を専門にしてきた<br>
+        キャリアアドバイザーが、<br>
+        あなたの強みを市場に変換します。
+      </p>
+      <div class="cta-features">
+        <div class="cta-feature">診断結果をもとにした強みの言語化</div>
+        <div class="cta-feature">向いている業界・職種の具体的な提案</div>
+        <div class="cta-feature">体育会出身者の転職成功事例の共有</div>
+      </div>
+      <a href="https://line.me/R/ti/p/@509dlmul" class="cta-btn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.064-.022.134-.031.2-.031.211 0 .391.09.51.252l2.443 3.316V8.108c0-.345.282-.63.63-.63.346 0 .627.285.627.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+        </svg>
+        無料相談はこちら（LINE）
+      </a>
+      <p class="cta-note">※ 完全無料・強引な営業は一切ありません</p>
+    </section>
+
+    <footer>
+      <div class="footer-logo">一職入魂<span>キャリア</span></div>
+      <div class="footer-sub">© 2026 一職入魂 | 体育会出身者専門 転職サポート</div>
+    </footer>
+  `;
+}
+
+function switchType(id) {
+  const url = new URL(location.href);
+  url.searchParams.set('type', id);
+  history.pushState({}, '', url);
+  render(id);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render(getTypeId());
+</script>
+</body>
+</html>

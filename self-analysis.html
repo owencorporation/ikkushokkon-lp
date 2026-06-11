@@ -509,6 +509,52 @@
       -webkit-tap-highlight-color: transparent;
     }
     .reset-btn:hover { border-color: #f87171; color: #ef4444; }
+
+    /* ── AI診断セクション ── */
+    .diagnose-section {
+      background: linear-gradient(135deg, #1B3A6B 0%, #2952A3 100%);
+      padding: 40px 24px;
+      text-align: center;
+      color: #fff;
+    }
+    .diagnose-ttl {
+      font-size: 1.1rem;
+      font-weight: 900;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .diagnose-ttl em { color: var(--yellow); font-style: normal; }
+    .diagnose-body {
+      font-size: 0.82rem;
+      line-height: 2;
+      opacity: 0.88;
+      margin-bottom: 22px;
+    }
+    .diagnose-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--orange);
+      color: #fff;
+      font-size: 1.02rem;
+      font-weight: 700;
+      font-family: var(--font);
+      padding: 17px 20px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 4px 18px rgba(232,81,14,0.5);
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .diagnose-btn:hover { background: #d44510; transform: translateY(-2px); }
+    .diagnose-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    .loading-dots span { animation: blink 1.2s infinite; opacity: 0; }
+    .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
   </style>
 </head>
 <body>
@@ -780,6 +826,15 @@
   </div>
 </section>
 
+<!-- ── AI診断セクション ── -->
+<section class="diagnose-section">
+  <h2 class="diagnose-ttl">シートが埋まったら<br><em>AIキャリアタイプ診断</em>へ</h2>
+  <p class="diagnose-body">入力した自己分析をAIが丸ごと読み込み<br>あなたの「体育会キャリアタイプ」を<br>10タイプから判定します</p>
+  <button class="diagnose-btn" id="diagnoseBtn" onclick="startDiagnosis()">
+    ⚡ AIキャリアタイプ診断を受ける
+  </button>
+</section>
+
 <!-- ── CTA ── -->
 <section class="cta-wrap">
   <h2 class="cta-ttl">あなたの強みは<br>見つかりましたか？</h2>
@@ -945,6 +1000,84 @@ function showToast(msg) {
 buildGraph();
 loadAll();
 allInputs().forEach(el => el.addEventListener('input', scheduleSave));
+
+/* ── AI キャリアタイプ診断 ── */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyx8SEEbu4W_NpdKcKq7V_O13qdk6I6ktTaQPbtYB9k4msTVeEMIi_T4ZqOHgE9ngFX/exec';
+
+const DIAGNOSIS_LABELS = [
+  'なぜその競技を始めましたか？',
+  '最も努力した時期はいつですか？その内容は？',
+  '最も苦しかった経験は何ですか？どう乗り越えましたか？',
+  '最も成長を感じた経験は何ですか？',
+  '最も誇れる成果・実績は何ですか？',
+  '最も楽しかった時期とその理由',
+  '最も苦しかった時期',
+  'モチベーションが上がるときの共通点',
+  '頑張れる環境タイプ',
+  'チームメイトからよく言われたこと',
+  '監督・コーチから評価されたこと',
+  '後輩から頼られたこと',
+  'チームでの自分の役割',
+  '自分が抜けたらチームが困ること',
+  '競技で身についたスキル',
+  '人より得意なこと・自信があること',
+  '5年後の理想の働き方',
+  '仕事を通じて成し遂げたいこと',
+  '市場・社会に求められていること',
+  '市場価値を高めるために必要なこと',
+  '私の強みは',
+  'その強みが発揮された経験',
+  '仕事での活かし方'
+];
+
+async function startDiagnosis() {
+  const inputs = Array.from(document.querySelectorAll('textarea'));
+  const filled = inputs.filter(el => el.value.trim().length > 0).length;
+
+  if (filled < 5) {
+    alert('まずはいくつかの質問に答えてみてください！\n（目安：5項目以上埋めてから診断できます）');
+    return;
+  }
+
+  const answers = {};
+  inputs.forEach((el, i) => {
+    if (el.value.trim() && DIAGNOSIS_LABELS[i]) {
+      answers[DIAGNOSIS_LABELS[i]] = el.value.trim();
+    }
+  });
+
+  if (selected.some(v => v !== null)) {
+    const graphText = selected
+      .map((v, i) => v !== null ? `${PERIODS[i]}:${v}点` : null)
+      .filter(Boolean).join(' / ');
+    if (graphText) answers['モチベーショングラフ（各時期の点数）'] = graphText;
+  }
+
+  const btn = document.getElementById('diagnoseBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'AI診断中<span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ type: 'career_diagnosis', answers })
+    });
+    const result = await res.json();
+
+    if (result.typeId) {
+      localStorage.setItem('career_diagnosis_result', JSON.stringify(result));
+      window.location.href = `result.html?type=${result.typeId}`;
+    } else {
+      throw new Error('typeId missing: ' + JSON.stringify(result));
+    }
+  } catch (err) {
+    console.error(err);
+    alert('診断中にエラーが発生しました。\nしばらく待ってからもう一度お試しください。');
+    btn.disabled = false;
+    btn.innerHTML = '⚡ AIキャリアタイプ診断を受ける';
+  }
+}
 </script>
 </body>
 </html>
