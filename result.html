@@ -278,7 +278,7 @@
     .skills-list { display: flex; flex-direction: column; gap: 8px; }
     .skill-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 10px;
       background: #F7F9FF;
       border-radius: 8px;
@@ -292,7 +292,10 @@
       color: var(--orange);
       font-size: 0.65rem;
       flex-shrink: 0;
+      margin-top: 3px;
     }
+    .skill-item-body { flex: 1; }
+    .skill-reason { font-size: 0.72rem; color: var(--sub); font-weight: 400; margin-top: 3px; line-height: 1.5; }
 
     /* ── Match meter ── */
     .match-bar-wrap { margin-top: 4px; }
@@ -443,6 +446,79 @@
       color: var(--sub);
       margin-top: 3px;
       line-height: 1.3;
+    }
+
+    /* ── Strengths list (redesigned) ── */
+    .strengths-list { display: flex; flex-direction: column; gap: 10px; }
+    .strength-item {
+      background: #F7F9FF;
+      border-left: 4px solid var(--navy);
+      border-radius: 0 10px 10px 0;
+      padding: 12px 16px;
+    }
+    .strength-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 3px;
+    }
+    .strength-reason { font-size: 0.75rem; color: var(--sub); line-height: 1.6; }
+
+    /* ── Reason box ── */
+    .reason-box {
+      background: #F7F9FF;
+      border-left: 3px solid var(--navy);
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    /* ── Download button ── */
+    .download-section {
+      margin: 20px 16px 0;
+      text-align: center;
+    }
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      color: var(--navy);
+      font-size: 0.88rem;
+      font-weight: 700;
+      font-family: var(--font);
+      padding: 13px 28px;
+      border-radius: 50px;
+      border: 2px solid var(--navy);
+      cursor: pointer;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .download-btn:hover { background: var(--navy); color: #fff; }
+
+    /* ── Print: A4横 ── */
+    @media print {
+      @page { size: A4 landscape; margin: 10mm 14mm; }
+      .top-bar, .type-switcher-wrap, .cta-wrap, footer,
+      .download-section { display: none !important; }
+      body { max-width: none; background: #fff; }
+      #resultRoot {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px 14px;
+        align-items: start;
+      }
+      .type-hero { grid-column: 1 / -1; padding: 16px 24px 12px; }
+      .result-section { margin: 0; padding: 0; break-inside: avoid; }
+      .result-card { box-shadow: none; border: 1px solid #ddd; padding: 10px 12px; margin: 0; }
+      .section-title { font-size: 0.74rem; padding-bottom: 6px; margin-bottom: 8px; }
+      .type-desc, .strength-reason, .reason-box,
+      .env-card-text, .advisor-text, .skill-reason { font-size: 0.7rem; line-height: 1.5; }
+      .type-name { font-size: 1.5rem; }
+      .type-tagline { font-size: 0.76rem; }
     }
 
     /* ── AI Advisor Message ── */
@@ -852,7 +928,6 @@ function render(typeId) {
     <!-- Hero -->
     <section class="type-hero" style="background: linear-gradient(160deg, ${t.bgColor} 0%, ${t.accentColor} 100%);">
       <div class="type-badge">CAREER TYPE #${typeId}</div>
-      <div class="type-icon">${t.icon}</div>
       <div class="type-name">${t.name}</div>
       <div class="type-tagline">${t.tagline.replace(/\n/g, '<br>')}</div>
     </section>
@@ -887,8 +962,15 @@ function render(typeId) {
     <div class="result-section">
       <div class="result-card">
         <div class="section-title">強み TOP 3</div>
-        <div class="strengths-row">
-          ${t.strengths.map((s, i) => `<div class="strength-chip">${['🥇','🥈','🥉'][i]} ${s}</div>`).join('')}
+        <div class="strengths-list">
+          ${t.strengths.map((s, i) => `
+            <div class="strength-item">
+              <div class="strength-name">${i + 1}位　${s}</div>
+              ${custom && custom.strengthReasons && custom.strengthReasons[i]
+                ? `<div class="strength-reason">${custom.strengthReasons[i]}</div>`
+                : ''}
+            </div>
+          `).join('')}
         </div>
       </div>
     </div>
@@ -921,11 +1003,13 @@ function render(typeId) {
         <div class="tag-list">
           ${t.jobs.map(j => `<span class="tag-job">${j}</span>`).join('')}
         </div>
+        ${custom && custom.jobReason ? `<div class="reason-box">${custom.jobReason}</div>` : ''}
         <div class="section-divider"></div>
         <div class="section-title">向いている業界</div>
         <div class="tag-list">
           ${t.industries.map(i => `<span class="tag-industry">${i}</span>`).join('')}
         </div>
+        ${custom && custom.industryReason ? `<div class="reason-box">${custom.industryReason}</div>` : ''}
       </div>
     </div>
 
@@ -934,6 +1018,7 @@ function render(typeId) {
       <div class="result-card">
         <div class="section-title">向いている企業規模</div>
         <div class="size-row">${sizeItems}</div>
+        ${custom && custom.sizeReason ? `<div class="reason-box">${custom.sizeReason}</div>` : ''}
       </div>
     </div>
 
@@ -944,6 +1029,7 @@ function render(typeId) {
         <div class="culture-list">
           ${t.culture.map(c => `<span class="culture-chip">✓ ${c}</span>`).join('')}
         </div>
+        ${custom && custom.cultureReason ? `<div class="reason-box">${custom.cultureReason}</div>` : ''}
       </div>
     </div>
 
@@ -969,7 +1055,16 @@ function render(typeId) {
       <div class="result-card">
         <div class="section-title">今後伸ばすべき能力</div>
         <div class="skills-list">
-          ${t.skills.map(s => `<div class="skill-item">${s}</div>`).join('')}
+          ${t.skills.map((s, i) => `
+            <div class="skill-item">
+              <div class="skill-item-body">
+                <div>${s}</div>
+                ${custom && custom.skillReasons && custom.skillReasons[i]
+                  ? `<div class="skill-reason">${custom.skillReasons[i]}</div>`
+                  : ''}
+              </div>
+            </div>
+          `).join('')}
         </div>
       </div>
     </div>
@@ -986,6 +1081,13 @@ function render(typeId) {
       </div>
     </div>
     ` : ''}
+
+    <!-- Download PDF -->
+    <div class="download-section">
+      <button class="download-btn" onclick="window.print()">
+        ↓ 診断結果をPDFで保存（A4横）
+      </button>
+    </div>
 
     <!-- Type switcher -->
     <div class="type-switcher-wrap">
