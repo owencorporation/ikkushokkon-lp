@@ -1066,6 +1066,14 @@ async function startDiagnosis() {
     const result = await res.json();
 
     if (result.typeId) {
+      // STEP5の強みまとめをAI生成結果で自動入力
+      if (result.strengthSummary) {
+        const fillTas = document.querySelectorAll('.fill-ta');
+        if (fillTas[0]) fillTas[0].value = result.strengthSummary.strength || '';
+        if (fillTas[1]) fillTas[1].value = result.strengthSummary.experience || '';
+        if (fillTas[2]) fillTas[2].value = result.strengthSummary.businessUse || '';
+        saveAll();
+      }
       localStorage.setItem('career_diagnosis_result', JSON.stringify(result));
       window.location.href = `result.html?type=${result.typeId}`;
     } else {

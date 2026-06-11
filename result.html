@@ -476,6 +476,35 @@
       color: var(--text);
     }
 
+    /* ── Self PR card ── */
+    .selfpr-card {
+      background: #F7F9FF;
+      border-radius: 10px;
+      padding: 16px 18px;
+      font-size: 0.88rem;
+      line-height: 2.1;
+      color: var(--text);
+    }
+    .selfpr-card strong {
+      color: var(--navy);
+      font-weight: 700;
+      background: linear-gradient(transparent 60%, rgba(248,201,78,0.45) 60%);
+    }
+    .selfpr-copy-btn {
+      margin-top: 10px;
+      width: 100%;
+      background: none;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 9px;
+      font-size: 0.78rem;
+      font-family: var(--font);
+      color: var(--sub);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .selfpr-copy-btn:hover { border-color: var(--navy); color: var(--navy); }
+
     /* ── Download button ── */
     .download-section {
       margin: 20px 16px 0;
@@ -1082,6 +1111,21 @@ function render(typeId) {
     </div>
     ` : ''}
 
+    ${custom && custom.strengthSummary ? `
+    <!-- Self PR -->
+    <div class="result-section">
+      <div class="result-card">
+        <div class="section-title">AIが生成した強み自己PR文</div>
+        <div class="selfpr-card" id="selfprText">
+          私の強みは<strong>${custom.strengthSummary.strength}</strong>です。<br>
+          その強みは${custom.strengthSummary.experience}という経験で発揮されました。<br>
+          仕事では${custom.strengthSummary.businessUse}で活かせます。
+        </div>
+        <button class="selfpr-copy-btn" onclick="copySelfPR()">📋 テキストをコピー</button>
+      </div>
+    </div>
+    ` : ''}
+
     <!-- Download PDF -->
     <div class="download-section">
       <button class="download-btn" onclick="window.print()">
@@ -1125,6 +1169,17 @@ function render(typeId) {
       <div class="footer-sub">© 2026 一職入魂 | 体育会出身者専門 転職サポート</div>
     </footer>
   `;
+}
+
+function copySelfPR() {
+  const el = document.getElementById('selfprText');
+  if (!el) return;
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.selfpr-copy-btn');
+    btn.textContent = '✓ コピーしました';
+    setTimeout(() => { btn.textContent = '📋 テキストをコピー'; }, 2000);
+  });
 }
 
 function switchType(id) {
